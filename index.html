@@ -30,14 +30,16 @@
     <meta property="og:image" content="https://www.nphairexpress.com.br/IMG_0147.jpg">
     <meta property="og:type" content="website">
 
-    <!-- DADOS ESTRUTURADOS (SCHEMA.ORG) - FUNDAMENTAL PARA IA -->
+    <!-- DADOS ESTRUTURADOS (SCHEMA.ORG) - CORRIGIDO E VALIDADO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BeautySalon",
       "name": "NP Hair Express",
-      "image": "https://www.nphairexpress.com.br/IMG_0147.jpg",
-      "@id": "https://www.nphairexpress.com.br",
+      "image": [
+        "https://www.nphairexpress.com.br/IMG_0147.jpg"
+      ],
+      "@id": "https://www.nphairexpress.com.br/#localbusiness",
       "url": "https://www.nphairexpress.com.br",
       "telephone": "+5519990091315",
       "address": {
@@ -53,6 +55,7 @@
         "latitude": -23.2057777,
         "longitude": -47.2925203
       },
+      "hasMap": "https://www.google.com/maps/dir//NP+Hair+Express,+R.+Sete+de+Setembro,+374+-+Vila+Henrique,+Salto+-+SP,+13320-040/",
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": [
@@ -65,9 +68,12 @@
         "opens": "09:00",
         "closes": "19:00"
       },
+      "sameAs": [
+        "https://www.instagram.com/nphairexpress",
+        "https://www.facebook.com/nphairexpress"
+      ],
       "priceRange": "$$",
-      "servesCuisine": "Beauty Services",
-      "paymentAccepted": "Cash, Credit Card, Pix",
+      "paymentAccepted": "Dinheiro, Cartão de Crédito, Cartão de Débito, Pix",
       "description": "Salão de beleza especializado em escovas rápidas sem hora marcada em Salto-SP."
     }
     </script>
