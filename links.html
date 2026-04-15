@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NP Hair Express | Links</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ffffff'/%3E%3Ctext x='50' y='65' font-family='Arial, sans-serif' font-weight='bold' font-size='60' fill='%23FF6B35' text-anchor='middle'%3ENP%3C/text%3E%3C/svg%3E">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #18181b, #27272a);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        .avatar span {
+            font-size: 32px;
+            font-weight: 800;
+            color: #FF6B35;
+        }
+        h1 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #a1a1aa;
+            font-size: 14px;
+            margin-top: 4px;
+            margin-bottom: 32px;
+        }
+        .links {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        a.link-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        a.link-btn.primary {
+            background: #FF6B35;
+            color: #fff;
+        }
+        a.link-btn.primary:hover {
+            background: #e55a25;
+        }
+        a.link-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        a.link-btn.secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .link-text h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .link-text p {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+        .footer {
+            margin-top: 32px;
+            color: #3f3f46;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="avatar"><span>NP</span></div>
+    <h1>NP Hair Express</h1>
+    <p class="subtitle">Salao sem agendamento</p>
+
+    <div class="links">
+        <a href="https://suavezexpress.vercel.app/fila" class="link-btn primary">
+            <svg class="link-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+            <div class="link-text">
+                <h3>Entrar na Fila</h3>
+                <p>Compre seu servico e entre na fila online</p>
+            </div>
+        </a>
+
+        <a href="https://www.nphairexpress.com.br" class="link-btn secondary">
+            <svg class="link-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <div class="link-text">
+                <h3>Nosso Site</h3>
+                <p>Conheca o NP Hair Express</p>
+            </div>
+        </a>
+
+        <a href="https://wa.me/5519990091315" class="link-btn secondary">
+            <svg class="link-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            <div class="link-text">
+                <h3>WhatsApp</h3>
+                <p>Fale conosco</p>
+            </div>
+        </a>
+    </div>
+
+    <p class="footer">NP Hair Express — Salto/SP</p>
+
+</body>
+</html>
