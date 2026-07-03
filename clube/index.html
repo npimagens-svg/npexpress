@@ -11,6 +11,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Libre+Caslon+Text:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<!-- META PIXEL — PRA ATIVAR: troque "COLOCAR_ID" abaixo pelo ID do pixel (ou defina window.NP_PIXEL_ID num script antes deste). Enquanto for "COLOCAR_ID", nada é enviado. -->
+<script>
+  const PIXEL_ID = window.NP_PIXEL_ID || "COLOCAR_ID";
+  window.npTrack = function (evento, params) {
+    if (PIXEL_ID !== "COLOCAR_ID" && typeof window.fbq === "function") {
+      window.fbq("track", evento, params || {});
+    }
+  };
+  if (PIXEL_ID !== "COLOCAR_ID") {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', PIXEL_ID);
+    fbq('track', 'PageView');
+    fbq('track', 'ViewContent', { content_name: 'Clube da Escova' });
+  }
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -424,6 +443,99 @@
     display: block; border-radius: 12px; background: var(--brand);
     padding: 14px; text-align: center; font-size: 16px; font-weight: 700; color: var(--ink);
   }
+
+  /* ---------- checkout modal ---------- */
+  .co-overlay {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; align-items: flex-end; justify-content: center;
+    background: rgba(10,7,5,0.78);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 0;
+  }
+  .co-overlay[hidden] { display: none; }
+  @media (min-width: 640px) { .co-overlay { align-items: center; padding: 24px; } }
+  .co-modal {
+    width: 100%; max-width: 30rem; max-height: 92dvh;
+    overflow-y: auto; overflow-x: hidden;
+    border-radius: 20px 20px 0 0;
+    border: 1px solid var(--border);
+    background: var(--card-hi);
+    padding: 24px 20px 28px;
+    position: relative;
+  }
+  @media (min-width: 640px) { .co-modal { border-radius: 20px; padding: 32px 28px; } }
+  .co-close {
+    position: absolute; top: 14px; right: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 9999px;
+    background: rgba(255,255,255,0.06); color: var(--muted);
+    font-size: 20px; line-height: 1;
+  }
+  .co-close:hover { color: var(--text); background: rgba(255,255,255,0.12); }
+  .co-eyebrow {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.2em; color: var(--brand);
+  }
+  .co-plano { margin-top: 6px; font-family: var(--serif); font-size: 22px; color: var(--text); }
+  .co-preco {
+    margin-top: 4px; font-family: var(--mono); font-size: 30px; font-weight: 700; color: var(--brand);
+  }
+  .co-preco span { font-family: var(--sans); font-size: 14px; font-weight: 400; color: var(--muted); }
+  .co-form { margin-top: 20px; }
+  .co-field { margin-top: 14px; }
+  .co-field label {
+    display: block; margin-bottom: 6px;
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted);
+  }
+  .co-field input {
+    width: 100%; border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-alt); color: var(--text);
+    padding: 14px 16px; font-size: 16px; font-family: var(--sans);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+  .co-field input:focus { border-color: var(--brand); }
+  .co-field input::placeholder { color: var(--faint); }
+  .co-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .co-cartao-head {
+    margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--text);
+  }
+  .co-cartao-head .icon { color: var(--brand); }
+  .co-erro {
+    margin-top: 16px; border-radius: 12px;
+    border: 1px solid rgba(255,107,87,0.45);
+    background: rgba(255,107,87,0.1);
+    padding: 12px 16px; font-size: 14px; line-height: 1.5; color: #ffb3a7;
+  }
+  .co-submit {
+    margin-top: 20px; display: block; width: 100%;
+    border-radius: 12px; background: var(--brand);
+    padding: 16px; text-align: center;
+    font-size: 16px; font-weight: 700; color: var(--ink);
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+  }
+  .co-submit:hover { background: var(--brand-hover); }
+  .co-submit[disabled] { opacity: 0.6; cursor: wait; }
+  .co-safe {
+    margin-top: 12px; text-align: center;
+    font-size: 12px; color: var(--faint);
+  }
+  .co-sucesso { text-align: center; padding: 24px 4px 8px; }
+  .co-sucesso .co-check {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 64px; height: 64px; border-radius: 9999px;
+    background: rgba(247,161,0,0.12); color: var(--brand);
+  }
+  .co-sucesso h3 { margin-top: 16px; font-family: var(--serif); font-size: 26px; color: var(--text); }
+  .co-sucesso p { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .co-sucesso .co-submit { margin-top: 24px; }
+  body.co-lock { overflow: hidden; }
 </style>
 </head>
 <body>
@@ -610,7 +722,7 @@
               Cancela quando quiser, sem fidelidade
             </li>
           </ul>
-          <a href="https://www.asaas.com/c/ctbr9733y2dye8r1" data-field="link" target="_blank" rel="noopener noreferrer" class="plano-cta solid">Assinar agora</a>
+          <button type="button" data-checkout class="plano-cta solid" style="width:100%;">Assinar agora</button>
         </div>
 
         <!-- Plano 8 escovas -->
@@ -642,13 +754,13 @@
               Cancela quando quiser, sem fidelidade
             </li>
           </ul>
-          <a href="https://www.asaas.com/c/wqep6rzf1vn2g27r" data-field="link" target="_blank" rel="noopener noreferrer" class="plano-cta outline">Assinar agora</a>
+          <button type="button" data-checkout class="plano-cta outline" style="width:100%;">Assinar agora</button>
         </div>
       </div>
 
       <p class="planos-foot">
         Escova modelada soma R$10 na hora. Pagamento seguro pelo Asaas —
-        cartão, Pix ou boleto.
+        cartão de crédito, com renovação automática.
       </p>
     </div>
   </section>
@@ -737,7 +849,7 @@
               <svg class="icon chev" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <div class="faq-a"><div>
-              <p>É uma assinatura mensal automática no cartão, pelo Asaas — plataforma de pagamento usada por milhares de empresas no Brasil, ambiente seguro. Também dá pra pagar por Pix ou boleto. Você assina uma vez e não pensa mais nisso.</p>
+              <p>É uma assinatura mensal automática no cartão de crédito, processada pelo Asaas — plataforma de pagamento usada por milhares de empresas no Brasil, ambiente seguro. Você assina uma vez, direto aqui na página, e não pensa mais nisso.</p>
             </div></div>
           </div>
         </div>
@@ -832,6 +944,85 @@
     <a href="#planos">Assinar por R$197/mês</a>
   </div>
 
+  <!-- CHECKOUT TRANSPARENTE -->
+  <div class="co-overlay" id="co-overlay" hidden>
+    <div class="co-modal" role="dialog" aria-modal="true" aria-labelledby="co-plano">
+      <button type="button" class="co-close" id="co-close" aria-label="Fechar">&times;</button>
+
+      <div id="co-form-view">
+        <p class="co-eyebrow">Clube da Escova</p>
+        <h3 class="co-plano" id="co-plano">4 escovas por mês — curto ou médio</h3>
+        <p class="co-preco" id="co-preco">R$197<span> /mês no cartão</span></p>
+
+        <form class="co-form" id="co-form" novalidate>
+          <div class="co-field">
+            <label for="co-nome">Nome completo</label>
+            <input id="co-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required />
+          </div>
+          <div class="co-field">
+            <label for="co-cpf">CPF</label>
+            <input id="co-cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14" required />
+          </div>
+          <div class="co-field">
+            <label for="co-email">E-mail</label>
+            <input id="co-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required />
+          </div>
+          <div class="co-grid-2">
+            <div class="co-field">
+              <label for="co-celular">Celular</label>
+              <input id="co-celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 99999-9999" maxlength="15" required />
+            </div>
+            <div class="co-field">
+              <label for="co-cep">CEP</label>
+              <input id="co-cep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="13320-000" maxlength="9" required />
+            </div>
+          </div>
+          <div class="co-field">
+            <label for="co-numero">Número do endereço</label>
+            <input id="co-numero" name="numeroEndereco" type="text" inputmode="numeric" autocomplete="address-line2" placeholder="374" maxlength="10" required />
+          </div>
+
+          <p class="co-cartao-head">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            Cartão de crédito
+          </p>
+          <div class="co-field">
+            <label for="co-card-numero">Número do cartão</label>
+            <input id="co-card-numero" name="cardNumero" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23" required />
+          </div>
+          <div class="co-grid-2">
+            <div class="co-field">
+              <label for="co-card-validade">Validade (MM/AA)</label>
+              <input id="co-card-validade" name="cardValidade" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" required />
+            </div>
+            <div class="co-field">
+              <label for="co-card-cvv">CVV</label>
+              <input id="co-card-cvv" name="cardCvv" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" required />
+            </div>
+          </div>
+          <div class="co-field">
+            <label for="co-card-nome">Nome impresso no cartão</label>
+            <input id="co-card-nome" name="cardNome" type="text" autocomplete="cc-name" placeholder="Como está no cartão" required />
+          </div>
+
+          <div class="co-erro" id="co-erro" hidden></div>
+
+          <button type="submit" class="co-submit" id="co-submit">Confirmar assinatura de R$197/mês</button>
+          <p class="co-safe">Pagamento seguro processado pelo Asaas · só cartão de crédito</p>
+        </form>
+      </div>
+
+      <div class="co-sucesso" id="co-sucesso" hidden>
+        <span class="co-check">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        </span>
+        <h3>Assinatura ativa!</h3>
+        <p>Você já pode vir toda semana. Nos vemos no salão.</p>
+        <button type="button" class="co-submit" id="co-sucesso-fechar">Fechar</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (function () {
   "use strict";
@@ -894,19 +1085,21 @@
   /* ---------- Toggle curto/médio ↔ longo ---------- */
   var PLANOS = {
     "4": {
-      curto: { preco: 197, avulso: 308, economia: 111, porescova: 49, link: "https://www.asaas.com/c/ctbr9733y2dye8r1" },
-      longo: { preco: 247, avulso: 388, economia: 141, porescova: 62, link: "https://www.asaas.com/c/a8d8qc2fryztsjeq" }
+      curto: { preco: 197, avulso: 308, economia: 111, porescova: 49 },
+      longo: { preco: 247, avulso: 388, economia: 141, porescova: 62 }
     },
     "8": {
-      curto: { preco: 347, avulso: 616, economia: 269, porescova: 43, link: "https://www.asaas.com/c/wqep6rzf1vn2g27r" },
-      longo: { preco: 447, avulso: 776, economia: 329, porescova: 56, link: "https://www.asaas.com/c/2xqfpqmyug6kbq3h" }
+      curto: { preco: 347, avulso: 616, economia: 269, porescova: 43 },
+      longo: { preco: 447, avulso: 776, economia: 329, porescova: 56 }
     }
   };
+  var comprimentoAtual = "curto";
 
   var grid = document.getElementById("planos-grid");
   var toggleButtons = document.querySelectorAll(".toggle button");
 
   function applyComprimento(comprimento) {
+    comprimentoAtual = comprimento;
     toggleButtons.forEach(function (btn) {
       btn.setAttribute("aria-pressed", String(btn.getAttribute("data-comprimento") === comprimento));
     });
@@ -916,7 +1109,6 @@
       card.querySelector('[data-field="porescova"]').textContent = "R$" + d.porescova;
       card.querySelector('[data-field="avulso"]').textContent = "R$" + d.avulso;
       card.querySelector('[data-field="economia"]').textContent = "R$" + d.economia;
-      card.querySelector('[data-field="link"]').setAttribute("href", d.link);
     });
     grid.classList.remove("fade-in");
     void grid.offsetWidth; /* reinicia a animação */
@@ -927,6 +1119,168 @@
     btn.addEventListener("click", function () {
       applyComprimento(btn.getAttribute("data-comprimento"));
     });
+  });
+
+  /* ---------- Checkout transparente ---------- */
+  var CHECKOUT_PLANOS = {
+    "4cm":   { valor: 197, titulo: "4 escovas por mês — curto ou médio" },
+    "4long": { valor: 247, titulo: "4 escovas por mês — longo" },
+    "8cm":   { valor: 347, titulo: "8 escovas por mês — curto ou médio" },
+    "8long": { valor: 447, titulo: "8 escovas por mês — longo" }
+  };
+
+  var coOverlay = document.getElementById("co-overlay");
+  var coPlanoEl = document.getElementById("co-plano");
+  var coPrecoEl = document.getElementById("co-preco");
+  var coForm = document.getElementById("co-form");
+  var coFormView = document.getElementById("co-form-view");
+  var coSucesso = document.getElementById("co-sucesso");
+  var coErro = document.getElementById("co-erro");
+  var coSubmit = document.getElementById("co-submit");
+  var planoAtivo = "4cm";
+
+  function track(evento, params) {
+    if (typeof window.npTrack === "function") window.npTrack(evento, params);
+  }
+
+  function abrirCheckout(planoKey) {
+    var p = CHECKOUT_PLANOS[planoKey];
+    if (!p) return;
+    planoAtivo = planoKey;
+    coPlanoEl.textContent = p.titulo;
+    coPrecoEl.innerHTML = "R$" + p.valor + "<span> /mês no cartão</span>";
+    coSubmit.textContent = "Confirmar assinatura de R$" + p.valor + "/mês";
+    coSubmit.disabled = false;
+    coErro.hidden = true;
+    coFormView.hidden = false;
+    coSucesso.hidden = true;
+    coOverlay.hidden = false;
+    document.body.classList.add("co-lock");
+    track("InitiateCheckout", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
+  }
+
+  function fecharCheckout() {
+    coOverlay.hidden = true;
+    document.body.classList.remove("co-lock");
+  }
+
+  document.querySelectorAll("[data-checkout]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var qtd = btn.closest(".plano-card").getAttribute("data-plano");
+      abrirCheckout(qtd + (comprimentoAtual === "longo" ? "long" : "cm"));
+    });
+  });
+  document.getElementById("co-close").addEventListener("click", fecharCheckout);
+  document.getElementById("co-sucesso-fechar").addEventListener("click", fecharCheckout);
+  coOverlay.addEventListener("click", function (e) {
+    if (e.target === coOverlay) fecharCheckout();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !coOverlay.hidden) fecharCheckout();
+  });
+
+  /* máscaras */
+  function mask(el, fn) { el.addEventListener("input", function () { el.value = fn(el.value); }); }
+  function dig(v, n) { return v.replace(/\D/g, "").slice(0, n); }
+  mask(document.getElementById("co-cpf"), function (v) {
+    v = dig(v, 11);
+    return v.replace(/^(\d{3})(\d)/, "$1.$2").replace(/^(\d{3}\.\d{3})(\d)/, "$1.$2").replace(/^(\d{3}\.\d{3}\.\d{3})(\d)/, "$1-$2");
+  });
+  mask(document.getElementById("co-celular"), function (v) {
+    v = dig(v, 11);
+    if (v.length > 10) return v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, "($1) $2-$3");
+    if (v.length > 6) return v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, "($1) $2-$3");
+    if (v.length > 2) return v.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    return v;
+  });
+  mask(document.getElementById("co-cep"), function (v) {
+    v = dig(v, 8);
+    return v.length > 5 ? v.replace(/^(\d{5})(\d)/, "$1-$2") : v;
+  });
+  mask(document.getElementById("co-card-numero"), function (v) {
+    return dig(v, 19).replace(/(\d{4})(?=\d)/g, "$1 ");
+  });
+  mask(document.getElementById("co-card-validade"), function (v) {
+    v = dig(v, 4);
+    return v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v;
+  });
+  mask(document.getElementById("co-card-cvv"), function (v) { return dig(v, 4); });
+
+  function mostrarErro(msg) {
+    coErro.textContent = msg;
+    coErro.hidden = false;
+  }
+
+  coForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    coErro.hidden = true;
+
+    var p = CHECKOUT_PLANOS[planoAtivo];
+    var validade = document.getElementById("co-card-validade").value.split("/");
+    var dados = {
+      plano: planoAtivo,
+      nome: document.getElementById("co-nome").value.trim(),
+      cpf: document.getElementById("co-cpf").value,
+      email: document.getElementById("co-email").value.trim(),
+      celular: document.getElementById("co-celular").value,
+      cep: document.getElementById("co-cep").value,
+      numeroEndereco: document.getElementById("co-numero").value.trim(),
+      cartao: {
+        numero: document.getElementById("co-card-numero").value,
+        nomeTitular: document.getElementById("co-card-nome").value.trim(),
+        mesValidade: validade[0] || "",
+        anoValidade: validade[1] || "",
+        ccv: document.getElementById("co-card-cvv").value
+      }
+    };
+
+    if (dados.nome.length < 5 || dados.nome.indexOf(" ") === -1) return mostrarErro("Informe seu nome completo.");
+    if (dados.cpf.replace(/\D/g, "").length !== 11) return mostrarErro("CPF inválido — confira os 11 dígitos.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email)) return mostrarErro("E-mail inválido.");
+    if (dados.celular.replace(/\D/g, "").length < 10) return mostrarErro("Celular inválido — use o número com DDD.");
+    if (dados.cep.replace(/\D/g, "").length !== 8) return mostrarErro("CEP inválido.");
+    if (!dados.numeroEndereco) return mostrarErro("Informe o número do seu endereço.");
+    if (dados.cartao.numero.replace(/\D/g, "").length < 13) return mostrarErro("Número do cartão inválido.");
+    if (!/^\d{2}\/\d{2}$/.test(document.getElementById("co-card-validade").value)) return mostrarErro("Validade do cartão inválida — use MM/AA.");
+    if (dados.cartao.ccv.length < 3) return mostrarErro("CVV inválido.");
+    if (dados.cartao.nomeTitular.length < 2) return mostrarErro("Informe o nome impresso no cartão.");
+
+    track("AddPaymentInfo", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
+
+    coSubmit.disabled = true;
+    var textoOriginal = coSubmit.textContent;
+    coSubmit.textContent = "Processando…";
+
+    fetch("/api/assinar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    })
+      .then(function (res) { return res.json().catch(function () { return {}; }); })
+      .then(function (resp) {
+        if (resp && resp.ok) {
+          var evParams = {
+            content_name: "Clube da Escova",
+            value: p.valor,
+            currency: "BRL",
+            predicted_ltv: p.valor * 3
+          };
+          track("Subscribe", evParams);
+          track("Purchase", evParams);
+          coFormView.hidden = true;
+          coSucesso.hidden = false;
+          coSucesso.scrollIntoView({ block: "nearest" });
+        } else {
+          mostrarErro((resp && resp.erro) || "Não conseguimos concluir sua assinatura agora. Tente de novo ou chame a gente no WhatsApp.");
+          coSubmit.disabled = false;
+          coSubmit.textContent = textoOriginal;
+        }
+      })
+      .catch(function () {
+        mostrarErro("Falha de conexão. Confira sua internet e tente de novo.");
+        coSubmit.disabled = false;
+        coSubmit.textContent = textoOriginal;
+      });
   });
 
   /* ---------- Acordeão FAQ ---------- */
