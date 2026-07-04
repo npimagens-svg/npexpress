@@ -12,7 +12,7 @@ import assert from "node:assert/strict";
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tmp = mkdtempSync(join(tmpdir(), "assinar-"));
 copyFileSync(join(raiz, "functions/api/assinar.js"), join(tmp, "assinar.mjs"));
-const { montarPayloads, PLANOS, hojeSaoPaulo, ErroValidacao } = await import(
+const { montarPayloads, PLANOS, hojeSaoPaulo, ErroValidacao, CEP_SALAO, NUMERO_SALAO } = await import(
   pathToFileURL(join(tmp, "assinar.mjs")).href
 );
 
@@ -77,6 +77,16 @@ assert.equal(p3.subscription.nextDueDate, hojeSaoPaulo());
 assert.equal(hojeSaoPaulo(new Date("2026-01-02T01:00:00Z")), "2026-01-01");
 ok++;
 console.log("ok 3 — nextDueDate YYYY-MM-DD no fuso America/Sao_Paulo");
+
+// Caso 4 — sem CEP/número (checkout enxuto) cai no endereço do salão
+const semEndereco = { ...base, plano: "4cm" };
+delete semEndereco.cep;
+delete semEndereco.numeroEndereco;
+const p4 = montarPayloads(semEndereco);
+assert.equal(p4.subscription.creditCardHolderInfo.postalCode, CEP_SALAO);
+assert.equal(p4.subscription.creditCardHolderInfo.addressNumber, NUMERO_SALAO);
+ok++;
+console.log("ok 4 — sem CEP/número usa endereço do salão (checkout enxuto)");
 
 // Extra — validações rejeitam entrada ruim
 assert.throws(() => montarPayloads({ ...base, plano: "9x" }), ErroValidacao);

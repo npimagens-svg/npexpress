@@ -17,6 +17,11 @@ export const PLANOS = {
 
 export class ErroValidacao extends Error {}
 
+// Serviço presencial: o Asaas exige CEP + número no cartão, mas a cliente não
+// precisa digitar — cobrança referenciada no endereço do salão.
+export const CEP_SALAO = "13320040"; // R. 7 de Setembro, 374 — Centro, Salto/SP
+export const NUMERO_SALAO = "374";
+
 const soDigitos = (v) => String(v == null ? "" : v).replace(/\D/g, "");
 
 /** Data de hoje (YYYY-MM-DD) no fuso America/Sao_Paulo. */
@@ -59,11 +64,10 @@ export function montarPayloads(input) {
     throw new ErroValidacao("Celular inválido — use o número com DDD.");
   }
 
-  const cep = soDigitos(input.cep);
-  if (cep.length !== 8) throw new ErroValidacao("CEP inválido — confira os 8 dígitos.");
-
-  const numeroEndereco = String(input.numeroEndereco || "").trim();
-  if (!numeroEndereco) throw new ErroValidacao("Informe o número do seu endereço.");
+  // CEP/número são opcionais no form — caem no endereço do salão
+  let cep = soDigitos(input.cep);
+  if (cep.length !== 8) cep = CEP_SALAO;
+  const numeroEndereco = String(input.numeroEndereco || "").trim() || NUMERO_SALAO;
 
   const cartao = input.cartao || {};
   const numeroCartao = soDigitos(cartao.numero);

@@ -557,6 +557,29 @@
   }
   .co-preco span { font-family: var(--sans); font-size: 14px; font-weight: 400; color: var(--muted); }
   .co-form { margin-top: 20px; }
+  .co-steps { margin-top: 18px; }
+  .co-steps-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .co-step-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--faint);
+    transition: color 0.2s ease;
+  }
+  .co-step-label.active { color: var(--brand); }
+  .co-steps-bar {
+    height: 4px; border-radius: 9999px;
+    background: rgba(255,255,255,0.08); overflow: hidden;
+  }
+  .co-steps-bar span {
+    display: block; height: 100%; width: 50%; border-radius: 9999px;
+    background: var(--brand);
+    transition: width 0.3s ease;
+  }
+  .co-step[hidden], .co-submit[hidden], .co-back[hidden] { display: none; }
+  .co-back {
+    display: block; margin: 14px auto 0;
+    font-size: 13px; color: var(--muted); background: none;
+  }
+  .co-back:hover { color: var(--text); }
   .co-field { margin-top: 14px; }
   .co-field label {
     display: block; margin-bottom: 6px;
@@ -1028,60 +1051,64 @@
         <h3 class="co-plano" id="co-plano">4 escovas por mês — curto ou médio</h3>
         <p class="co-preco" id="co-preco">R$197<span> /mês no cartão</span></p>
 
-        <form class="co-form" id="co-form" novalidate>
-          <div class="co-field">
-            <label for="co-nome">Nome completo</label>
-            <input id="co-nome" name="nome" type="text" autocomplete="name" placeholder="Seu nome" required />
-          </div>
-          <div class="co-field">
-            <label for="co-cpf">CPF</label>
-            <input id="co-cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14" required />
-          </div>
-          <div class="co-field">
-            <label for="co-email">E-mail</label>
-            <input id="co-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required />
-          </div>
-          <div class="co-grid-2">
-            <div class="co-field">
-              <label for="co-celular">Celular</label>
-              <input id="co-celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 99999-9999" maxlength="15" required />
+        <form class="co-form" id="co-form" novalidate autocomplete="on">
+          <div class="co-steps">
+            <div class="co-steps-labels">
+              <span class="co-step-label active" id="co-label-1">1 · Seus dados</span>
+              <span class="co-step-label" id="co-label-2">2 · Pagamento</span>
             </div>
-            <div class="co-field">
-              <label for="co-cep">CEP</label>
-              <input id="co-cep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="13320-000" maxlength="9" required />
-            </div>
-          </div>
-          <div class="co-field">
-            <label for="co-numero">Número do endereço</label>
-            <input id="co-numero" name="numeroEndereco" type="text" inputmode="numeric" autocomplete="address-line2" placeholder="374" maxlength="10" required />
+            <div class="co-steps-bar"><span id="co-steps-fill"></span></div>
           </div>
 
-          <p class="co-cartao-head">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-            Cartão de crédito
-          </p>
-          <div class="co-field">
-            <label for="co-card-numero">Número do cartão</label>
-            <input id="co-card-numero" name="cardNumero" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23" required />
-          </div>
-          <div class="co-grid-2">
+          <div class="co-step" id="co-step-1">
             <div class="co-field">
-              <label for="co-card-validade">Validade (MM/AA)</label>
-              <input id="co-card-validade" name="cardValidade" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" required />
+              <label for="co-nome">Nome completo</label>
+              <input id="co-nome" name="name" type="text" autocomplete="name" placeholder="Seu nome" required />
             </div>
             <div class="co-field">
-              <label for="co-card-cvv">CVV</label>
-              <input id="co-card-cvv" name="cardCvv" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" required />
+              <label for="co-celular">WhatsApp</label>
+              <input id="co-celular" name="tel" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(11) 99999-9999" maxlength="15" required />
+            </div>
+            <div class="co-field">
+              <label for="co-email">E-mail</label>
+              <input id="co-email" name="email" type="email" autocomplete="email" placeholder="voce@email.com" required />
             </div>
           </div>
-          <div class="co-field">
-            <label for="co-card-nome">Nome impresso no cartão</label>
-            <input id="co-card-nome" name="cardNome" type="text" autocomplete="cc-name" placeholder="Como está no cartão" required />
+
+          <div class="co-step" id="co-step-2" hidden>
+            <p class="co-cartao-head" style="margin-top:20px; padding-top:0; border-top:none;">
+              <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+              Cartão de crédito
+            </p>
+            <div class="co-field">
+              <label for="co-card-numero">Número do cartão</label>
+              <input id="co-card-numero" name="cc-number" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23" required />
+            </div>
+            <div class="co-grid-2">
+              <div class="co-field">
+                <label for="co-card-validade">Validade (MM/AA)</label>
+                <input id="co-card-validade" name="cc-exp" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5" required />
+              </div>
+              <div class="co-field">
+                <label for="co-card-cvv">CVV</label>
+                <input id="co-card-cvv" name="cc-csc" type="text" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" required />
+              </div>
+            </div>
+            <div class="co-field">
+              <label for="co-card-nome">Nome impresso no cartão</label>
+              <input id="co-card-nome" name="cc-name" type="text" autocomplete="cc-name" placeholder="Como está no cartão" required />
+            </div>
+            <div class="co-field">
+              <label for="co-cpf">CPF do titular</label>
+              <input id="co-cpf" name="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" maxlength="14" required />
+            </div>
           </div>
 
           <div class="co-erro" id="co-erro" hidden></div>
 
-          <button type="submit" class="co-submit" id="co-submit">Confirmar assinatura de R$197/mês</button>
+          <button type="button" class="co-submit" id="co-continuar">Continuar</button>
+          <button type="submit" class="co-submit" id="co-submit" hidden>Confirmar assinatura de R$197/mês</button>
+          <button type="button" class="co-back" id="co-voltar" hidden>&larr; Voltar aos meus dados</button>
           <p class="co-safe">Pagamento seguro processado pelo Asaas · só cartão de crédito</p>
         </form>
       </div>
@@ -1211,7 +1238,25 @@
   var coSucesso = document.getElementById("co-sucesso");
   var coErro = document.getElementById("co-erro");
   var coSubmit = document.getElementById("co-submit");
+  var coStep1 = document.getElementById("co-step-1");
+  var coStep2 = document.getElementById("co-step-2");
+  var coContinuar = document.getElementById("co-continuar");
+  var coVoltar = document.getElementById("co-voltar");
+  var coStepsFill = document.getElementById("co-steps-fill");
+  var coLabel2 = document.getElementById("co-label-2");
   var planoAtivo = "4cm";
+
+  function irPasso(n) {
+    var pagamento = n === 2;
+    coStep1.hidden = pagamento;
+    coStep2.hidden = !pagamento;
+    coContinuar.hidden = pagamento;
+    coSubmit.hidden = !pagamento;
+    coVoltar.hidden = !pagamento;
+    coLabel2.classList.toggle("active", pagamento);
+    coStepsFill.style.width = pagamento ? "100%" : "50%";
+    coErro.hidden = true;
+  }
 
   function track(evento, params) {
     if (typeof window.npTrack === "function") window.npTrack(evento, params);
@@ -1232,6 +1277,7 @@
     coSubmit.textContent = "Confirmar assinatura de R$" + p.valor + "/mês";
     coSubmit.disabled = false;
     coErro.hidden = true;
+    irPasso(1);
     coFormView.hidden = false;
     coSucesso.hidden = true;
     coOverlay.hidden = false;
@@ -1273,10 +1319,6 @@
     if (v.length > 2) return v.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
     return v;
   });
-  mask(document.getElementById("co-cep"), function (v) {
-    v = dig(v, 8);
-    return v.length > 5 ? v.replace(/^(\d{5})(\d)/, "$1-$2") : v;
-  });
   mask(document.getElementById("co-card-numero"), function (v) {
     return dig(v, 19).replace(/(\d{4})(?=\d)/g, "$1 ");
   });
@@ -1291,8 +1333,30 @@
     coErro.hidden = false;
   }
 
+  function validarPasso1() {
+    coErro.hidden = true;
+    var nome = document.getElementById("co-nome").value.trim();
+    var celular = document.getElementById("co-celular").value;
+    var email = document.getElementById("co-email").value.trim();
+    if (nome.length < 5 || nome.indexOf(" ") === -1) return mostrarErro("Informe seu nome completo.");
+    if (celular.replace(/\D/g, "").length < 10) return mostrarErro("WhatsApp inválido — use o número com DDD.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return mostrarErro("E-mail inválido.");
+    var p = CHECKOUT_PLANOS[planoAtivo];
+    track("Lead", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
+    irPasso(2);
+    var cardInput = document.getElementById("co-card-numero");
+    if (cardInput) cardInput.focus({ preventScroll: true });
+  }
+
+  coContinuar.addEventListener("click", validarPasso1);
+  coVoltar.addEventListener("click", function () { irPasso(1); });
+
   coForm.addEventListener("submit", function (e) {
     e.preventDefault();
+
+    // Enter no passo 1 avança em vez de submeter
+    if (!coStep1.hidden) return validarPasso1();
+
     coErro.hidden = true;
 
     var p = CHECKOUT_PLANOS[planoAtivo];
@@ -1303,8 +1367,6 @@
       cpf: document.getElementById("co-cpf").value,
       email: document.getElementById("co-email").value.trim(),
       celular: document.getElementById("co-celular").value,
-      cep: document.getElementById("co-cep").value,
-      numeroEndereco: document.getElementById("co-numero").value.trim(),
       cartao: {
         numero: document.getElementById("co-card-numero").value,
         nomeTitular: document.getElementById("co-card-nome").value.trim(),
@@ -1315,15 +1377,13 @@
     };
 
     if (dados.nome.length < 5 || dados.nome.indexOf(" ") === -1) return mostrarErro("Informe seu nome completo.");
-    if (dados.cpf.replace(/\D/g, "").length !== 11) return mostrarErro("CPF inválido — confira os 11 dígitos.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dados.email)) return mostrarErro("E-mail inválido.");
-    if (dados.celular.replace(/\D/g, "").length < 10) return mostrarErro("Celular inválido — use o número com DDD.");
-    if (dados.cep.replace(/\D/g, "").length !== 8) return mostrarErro("CEP inválido.");
-    if (!dados.numeroEndereco) return mostrarErro("Informe o número do seu endereço.");
+    if (dados.celular.replace(/\D/g, "").length < 10) return mostrarErro("WhatsApp inválido — use o número com DDD.");
     if (dados.cartao.numero.replace(/\D/g, "").length < 13) return mostrarErro("Número do cartão inválido.");
     if (!/^\d{2}\/\d{2}$/.test(document.getElementById("co-card-validade").value)) return mostrarErro("Validade do cartão inválida — use MM/AA.");
     if (dados.cartao.ccv.length < 3) return mostrarErro("CVV inválido.");
     if (dados.cartao.nomeTitular.length < 2) return mostrarErro("Informe o nome impresso no cartão.");
+    if (dados.cpf.replace(/\D/g, "").length !== 11) return mostrarErro("CPF inválido — confira os 11 dígitos.");
 
     track("AddPaymentInfo", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
 
