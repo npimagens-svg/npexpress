@@ -1217,6 +1217,12 @@
     if (typeof window.npTrack === "function") window.npTrack(evento, params);
   }
 
+  // Deep-link: /clube/?assinar=4cm|4long|8cm|8long abre o checkout direto no plano
+  document.addEventListener("DOMContentLoaded", function () {
+    var k = new URLSearchParams(location.search).get("assinar");
+    if (k && CHECKOUT_PLANOS[k]) setTimeout(function () { abrirCheckout(k); }, 400);
+  });
+
   function abrirCheckout(planoKey) {
     var p = CHECKOUT_PLANOS[planoKey];
     if (!p) return;
