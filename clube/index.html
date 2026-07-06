@@ -1343,6 +1343,21 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return mostrarErro("E-mail inválido.");
     var p = CHECKOUT_PLANOS[planoAtivo];
     track("Lead", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
+    // Captura do lead no servidor (recuperação de abandono) — não bloqueia o fluxo
+    try {
+      fetch("https://ewxiaxsmohxuabcmxuyc.supabase.co/functions/v1/clube-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          nome: nome,
+          whatsapp: celular.replace(/\D/g, ""),
+          email: email,
+          plano: p.titulo || planoAtivo,
+          valor: p.valor,
+        }),
+      }).catch(function () {});
+    } catch (err) {}
     irPasso(2);
     var cardInput = document.getElementById("co-card-numero");
     if (cardInput) cardInput.focus({ preventScroll: true });
