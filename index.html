@@ -84,7 +84,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- ÍCONES (FontAwesome) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <style>
         /* --- VARIÁVEIS DE COR E RESET --- */
@@ -580,7 +582,7 @@
             </div>
             <div class="hero-image">
                 <!-- AQUI ESTÁ A REFERÊNCIA PARA O SEU ARQUIVO DE FOTO LOCAL -->
-                <img src="IMG_0147.jpg" alt="Interior do salão NP Hair Express com cadeiras modernas">
+                <picture><source srcset="IMG_0147.webp" type="image/webp"><img src="IMG_0147.jpg" alt="Interior do salão NP Hair Express com cadeiras modernas" width="675" height="1200" loading="lazy" decoding="async"></picture>
             </div>
         </div>
     </section>
