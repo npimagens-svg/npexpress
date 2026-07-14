@@ -12,6 +12,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="facebook-domain-verification" content="7a1p2g3spbigwkiddn9gds36t8tdhp" />
+
+    <!-- PERF: aquece a conexão do Pixel (GTM) + pré-carrega a imagem principal (LCP) -->
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
+    <link rel="preload" as="image" href="IMG_0147.webp" type="image/webp" fetchpriority="high">
     
     <!-- FAVICON (ÍCONE DA ABA - NP EM LARANJA) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ffffff'/%3E%3Ctext x='50' y='65' font-family='Arial, sans-serif' font-weight='bold' font-size='60' fill='%23FF6B35' text-anchor='middle'%3ENP%3C/text%3E%3C/svg%3E">
@@ -81,7 +85,8 @@
     <!-- FONTES (Poppins) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"></noscript>
     
     <!-- ÍCONES (FontAwesome) -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -582,7 +587,7 @@
             </div>
             <div class="hero-image">
                 <!-- AQUI ESTÁ A REFERÊNCIA PARA O SEU ARQUIVO DE FOTO LOCAL -->
-                <picture><source srcset="IMG_0147.webp" type="image/webp"><img src="IMG_0147.jpg" alt="Interior do salão NP Hair Express com cadeiras modernas" width="675" height="1200" loading="lazy" decoding="async"></picture>
+                <picture><source srcset="IMG_0147.webp" type="image/webp"><img src="IMG_0147.jpg" alt="Interior do salão NP Hair Express com cadeiras modernas" width="675" height="1200" fetchpriority="high" decoding="async"></picture>
             </div>
         </div>
     </section>
