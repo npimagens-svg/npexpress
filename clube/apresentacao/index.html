@@ -145,6 +145,26 @@
     margin-top: 18px; text-align: center;
     font-size: 11px; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.45);
   }
+
+  /* slide final: mais conteúdo → tudo mais compacto e nunca corta por cima */
+  .sl-fim { justify-content: flex-end; padding-top: 46px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); }
+  .sl-fim .c { max-height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .sl-fim .c::-webkit-scrollbar { display: none; }
+  .sl-fim h2 { font-size: clamp(24px, 6.6vw, 40px); }
+  .sl-fim .tag { margin-bottom: 8px; }
+  .sl-fim .planos { margin-top: 12px; gap: 8px; }
+  .sl-fim .plano { padding: 11px 15px; border-radius: 13px; }
+  .sl-fim .plano .pr { font-size: 20px; }
+  .sl-fim .plano .nm { font-size: 13px; }
+  .sl-fim .plano .nm small { font-size: 11px; margin-top: 2px; }
+  .sl-fim .btn { margin-top: 12px; padding: 15px 26px; font-size: 16px; }
+  .sl-fim .ativa { margin-top: 10px; font-size: 12.5px; }
+  .sl-fim .rodape { margin-top: 10px; font-size: 10px; }
+  @media (max-height: 700px) {
+    .sl-fim h2 { font-size: 22px; }
+    .sl-fim .plano { padding: 9px 13px; }
+    .sl-fim .ativa { font-size: 11.5px; }
+  }
 </style>
 </head>
 <body>
@@ -224,7 +244,7 @@
   </section>
 
   <!-- 7 · planos + cta -->
-  <section class="sl">
+  <section class="sl sl-fim">
     <div class="bgimg" style="background-image:url('final.jpg');background-position:center 30%"></div>
     <div class="véu"></div>
     <div class="c">
