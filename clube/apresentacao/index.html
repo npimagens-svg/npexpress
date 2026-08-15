@@ -298,6 +298,12 @@
     for (var i = 0; i < total; i++) segs[i].className = i < atual ? 'done' : '';
     segs[atual].className = 'done';
     document.getElementById('dica').style.display = (atual === total - 1) ? 'none' : '';
+    // No slide final as zonas de toque saem da frente (o .deck é fixed = stacking
+    // context próprio, então z-index interno não vence as zonas): sem isso o
+    // clique no QUERO ASSINAR morria na zona de avanço. Voltar = swipe ou seta.
+    var fim = (atual === total - 1);
+    document.getElementById('zAvancar').style.display = fim ? 'none' : '';
+    document.getElementById('zVoltar').style.display = fim ? 'none' : '';
     if (window.fbq && atual === total - 1) fbq('trackCustom', 'ApresentacaoFim');
   }
   mostra(0);
@@ -316,9 +322,6 @@
     if (dx < -40) mostra(atual + 1);
     if (dx > 40) mostra(atual - 1);
   }, { passive: true });
-
-  // links do slide final ficam ACIMA das zonas de toque
-  slides[total - 1].style.zIndex = 22;
 
   // UTMs do e-mail seguem até o checkout
   var qs = new URLSearchParams(location.search), utms = [];
