@@ -2,15 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A conta da sua escova — Clube da Escova · NP Hair Express</title>
-<meta name="description" content="Quanto custa sair pronta toda semana? A gente fez a conta — e criou um jeito de ela fechar a seu favor. Conheça o Clube da Escova do NP Hair Express, em Salto/SP." />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Clube da Escova — NP Hair Express</title>
+<meta name="description" content="Uma apresentação de 1 minuto: a conta da sua escova e o Clube que faz ela fechar a seu favor. NP Hair Express, Salto/SP." />
 <meta name="robots" content="noindex" />
 <link rel="canonical" href="https://www.nphairexpress.com.br/clube/apresentacao/" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<meta name="theme-color" content="#0e0b08" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" href="hero.jpg" />
 <link rel="preconnect" href="https://connect.facebook.net" />
 <script>
   var PIXEL_ID = '376324615024225';
@@ -28,219 +30,287 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --brand: #F7A100;
-    --brand-hover: #ffb524;
-    --bg: #17120f;
-    --bg-alt: #1a1410;
-    --card: #1e1813;
-    --text: #f6f0e7;
-    --body: #cdbfab;
-    --muted: #a89a87;
-    --faint: #7d7160;
-    --border: rgba(255,255,255,0.1);
-    --sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-    --serif: 'Libre Caslon Text', ui-serif, Georgia, serif;
+    --brand-hi: #FFB524;
+    --bg: #0e0b08;
+    --text: #ffffff;
+    --dim: rgba(255,255,255,.72);
   }
-  html { scroll-behavior: smooth; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); overscroll-behavior: none; }
   body {
-    background: var(--bg);
+    font-family: 'Montserrat', -apple-system, system-ui, sans-serif;
     color: var(--text);
-    font-family: var(--sans);
-    font-size: 17px;
-    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   a { color: inherit; text-decoration: none; }
-  .slide {
-    min-height: 92svh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 64px 24px;
-    max-width: 620px;
-    margin: 0 auto;
-  }
-  .kicker {
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--brand);
-    margin-bottom: 20px;
-  }
-  h1, h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; }
-  h1 { font-size: clamp(30px, 7vw, 44px); line-height: 1.2; }
-  h2 { font-size: clamp(26px, 6vw, 36px); line-height: 1.25; margin-bottom: 18px; }
-  .lead { color: var(--body); font-size: 18px; margin-top: 18px; }
-  .num { font-family: var(--serif); color: var(--brand); }
-  .hr { width: 44px; height: 2px; background: var(--brand); border: 0; margin: 26px 0; }
 
-  .conta { margin: 26px 0 8px; border-top: 1px solid var(--border); }
-  .conta div {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: 14px 2px; border-bottom: 1px solid var(--border);
-    color: var(--body);
+  /* barra de progresso estilo stories */
+  .progress {
+    position: fixed; top: calc(env(safe-area-inset-top, 0px) + 12px);
+    left: 12px; right: 12px; z-index: 30;
+    display: flex; gap: 5px;
   }
-  .conta div strong { font-family: var(--serif); font-weight: 400; font-size: 20px; color: var(--text); }
-  .conta .destaque { color: var(--text); }
-  .conta .destaque strong { color: var(--brand); font-size: 26px; }
+  .progress span { flex: 1; height: 3px; border-radius: 99px; background: rgba(255,255,255,.22); overflow: hidden; }
+  .progress span i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width .25s ease; }
+  .progress span.done i { width: 100%; }
 
-  .passos { counter-reset: p; margin-top: 8px; }
-  .passo { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); color: var(--body); }
-  .passo::before {
-    counter-increment: p; content: counter(p);
-    font-family: var(--serif); font-size: 22px; color: var(--brand);
-    min-width: 28px;
+  .deck { position: fixed; inset: 0; }
+  .sl {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 26px calc(env(safe-area-inset-bottom, 0px) + 84px);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .32s ease;
+    background: var(--bg);
   }
-  .passo b { color: var(--text); font-weight: 500; }
+  .sl.on { opacity: 1; visibility: visible; pointer-events: auto; }
+  .sl .bgimg {
+    position: absolute; inset: 0; z-index: 0;
+    background-size: cover; background-position: center 22%;
+  }
+  .sl .véu {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, rgba(14,11,8,.55) 0%, rgba(14,11,8,.15) 38%, rgba(14,11,8,.82) 74%, rgba(14,11,8,.97) 100%);
+  }
+  .sl > .c { position: relative; z-index: 2; max-width: 560px; width: 100%; margin: 0 auto; }
 
-  .regras { list-style: none; margin-top: 4px; }
-  .regras li { padding: 11px 0 11px 26px; position: relative; color: var(--body); border-bottom: 1px solid var(--border); }
-  .regras li::before { content: '—'; position: absolute; left: 0; color: var(--brand); }
+  .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase;
+    color: var(--brand); margin-bottom: 14px;
+  }
+  h1, h2 { font-weight: 900; text-transform: uppercase; line-height: .98; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(44px, 12.5vw, 84px); }
+  h2 { font-size: clamp(38px, 11vw, 74px); }
+  .gold { color: var(--brand); }
+  .sub { font-size: clamp(16px, 4.4vw, 20px); font-weight: 700; color: var(--dim); margin-top: 16px; line-height: 1.4; }
+  .sub b { color: #fff; }
 
-  .planos { display: grid; gap: 14px; margin: 26px 0 10px; }
+  .bignum { font-weight: 900; font-size: clamp(88px, 26vw, 170px); line-height: .9; color: var(--brand); letter-spacing: -0.03em; }
+  .bignum small { font-size: .38em; vertical-align: super; letter-spacing: 0; }
+  .riscado { text-decoration: line-through; text-decoration-thickness: 6px; text-decoration-color: var(--brand); }
+
+  .passos { margin-top: 6px; }
+  .passo { display: flex; gap: 14px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,.14); }
+  .passo:last-child { border-bottom: 0; }
+  .passo .n { font-weight: 900; font-size: 26px; color: var(--brand); min-width: 30px; }
+  .passo p { font-size: clamp(16px, 4.5vw, 20px); font-weight: 700; line-height: 1.3; }
+  .passo p span { color: var(--dim); font-weight: 700; }
+
+  .regras { list-style: none; }
+  .regras li {
+    font-size: clamp(16px, 4.6vw, 21px); font-weight: 800; line-height: 1.3;
+    padding: 12px 0 12px 30px; position: relative; border-bottom: 1px solid rgba(255,255,255,.14);
+  }
+  .regras li:last-child { border-bottom: 0; }
+  .regras li::before { content: ''; position: absolute; left: 0; top: 21px; width: 16px; height: 4px; background: var(--brand); border-radius: 2px; }
+  .regras li span { color: var(--dim); font-weight: 700; }
+
+  .planos { display: grid; gap: 10px; margin-top: 18px; }
   .plano {
-    display: block; background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 18px 20px;
-    transition: border-color .15s ease, transform .15s ease;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,.07); border: 2px solid rgba(255,255,255,.16);
+    border-radius: 16px; padding: 15px 18px; backdrop-filter: blur(6px);
   }
-  .plano:hover { border-color: var(--brand); transform: translateY(-1px); }
-  .plano .p-top { display: flex; justify-content: space-between; align-items: baseline; }
-  .plano .p-nome { font-weight: 500; }
-  .plano .p-preco { font-family: var(--serif); font-size: 24px; color: var(--brand); }
-  .plano .p-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
-  .plano.principal { border-color: var(--brand); background: var(--bg-alt); }
-  .plano.principal .p-nome::after {
-    content: 'mais escolhido'; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--bg); background: var(--brand); border-radius: 99px; padding: 3px 9px; margin-left: 10px;
-    position: relative; top: -2px;
-  }
-  .ativa {
-    margin-top: 20px; padding: 16px 18px; border-left: 2px solid var(--brand);
-    background: var(--bg-alt); border-radius: 0 12px 12px 0; color: var(--body); font-size: 15px;
-  }
-  .ativa b { color: var(--text); }
-  .cta-fim { margin-top: 26px; }
-  .btn {
-    display: block; text-align: center; background: var(--brand); color: #17120f;
-    font-weight: 700; font-size: 17px; border-radius: 99px; padding: 17px 28px;
-    transition: background .15s ease;
-  }
-  .btn:hover { background: var(--brand-hover); }
-  .btn-sub { text-align: center; font-size: 13px; color: var(--faint); margin-top: 12px; }
+  .plano:active { transform: scale(.98); }
+  .plano .nm { font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: .02em; }
+  .plano .nm small { display: block; font-size: 12px; font-weight: 700; color: var(--dim); text-transform: none; letter-spacing: 0; margin-top: 3px; }
+  .plano .pr { font-weight: 900; font-size: 24px; color: var(--brand); white-space: nowrap; }
+  .plano.top { border-color: var(--brand); background: rgba(247,161,0,.14); }
 
-  .seta { text-align: center; color: var(--faint); font-size: 13px; padding-bottom: 26px; letter-spacing: .12em; text-transform: uppercase; }
-  footer { text-align: center; color: var(--faint); font-size: 13px; padding: 34px 20px 46px; border-top: 1px solid var(--border); }
-  footer b { color: var(--muted); font-weight: 500; }
+  .btn {
+    display: block; text-align: center;
+    background: var(--brand); color: #17120f;
+    font-weight: 900; font-size: 18px; text-transform: uppercase; letter-spacing: .04em;
+    border-radius: 99px; padding: 19px 30px; margin-top: 16px;
+    box-shadow: 0 10px 34px rgba(247,161,0,.35);
+  }
+  .btn:active { transform: scale(.98); }
+  .ativa { margin-top: 14px; font-size: 14px; font-weight: 700; color: var(--dim); text-align: center; line-height: 1.45; }
+  .ativa b { color: var(--brand-hi); }
+
+  .toque {
+    position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px);
+    left: 0; right: 0; z-index: 25; text-align: center;
+    font-size: 12px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    animation: pulsa 1.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes pulsa { 0%,100% { opacity: .55 } 50% { opacity: 1 } }
+  .voltar { position: fixed; left: 0; top: 0; bottom: 0; width: 22%; z-index: 20; }
+  .avancar { position: fixed; right: 0; top: 0; bottom: 0; width: 78%; z-index: 20; }
+  .rodape {
+    margin-top: 18px; text-align: center;
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.45);
+  }
 </style>
 </head>
 <body>
 
-<!-- 1 · capa -->
-<section class="slide">
-  <p class="kicker">NP Hair Express · Salto/SP</p>
-  <h1>Tem uma conta que a maioria das nossas clientes nunca fez.</h1>
-  <p class="lead">É a conta da escova. Leva um minuto — e depois dela, muita gente mudou o jeito de cuidar do cabelo. Vem ver.</p>
-</section>
-<p class="seta">deslize ↓</p>
+<div class="progress" id="prog"></div>
 
-<!-- 2 · a conta avulsa -->
-<section class="slide">
-  <p class="kicker">A conta</p>
-  <h2>Escova avulsa: <span class="num">R$&nbsp;77</span>.</h2>
-  <p class="lead">Uma por semana, que é o ritmo de quem gosta de estar sempre pronta:</p>
-  <div class="conta">
-    <div><span>4 escovas no mês, avulsas</span><strong>R$ 308</strong></div>
-    <div><span>No ano</span><strong>R$ 3.696</strong></div>
-  </div>
-</section>
+<div class="deck" id="deck">
 
-<!-- 3 · o clube -->
-<section class="slide">
-  <p class="kicker">O Clube da Escova</p>
-  <h2>As mesmas 4 escovas por <span class="num">R$&nbsp;197</span>.</h2>
-  <p class="lead">É uma assinatura mensal. As escovas ficam no seu nome, no nosso sistema, e você usa quando quiser vir.</p>
-  <div class="conta">
-    <div><span>Cada escova sai por</span><strong>R$ 49</strong></div>
-    <div class="destaque"><span>Sobra no seu bolso, todo mês</span><strong>R$ 111</strong></div>
-  </div>
-</section>
+  <!-- 1 · capa -->
+  <section class="sl on">
+    <div class="bgimg" style="background-image:url('hero.jpg')"></div>
+    <div class="véu"></div>
+    <div class="c">
+      <span class="tag">NP Hair Express · Salto/SP</span>
+      <h1>Você,<br>pronta.<br><span class="gold">Toda semana.</span></h1>
+      <p class="sub">Uma apresentação de 1 minuto sobre a conta que mudou a rotina das nossas clientes.</p>
+    </div>
+  </section>
 
-<!-- 4 · como funciona -->
-<section class="slide">
-  <p class="kicker">Como funciona</p>
-  <h2>Sem hora marcada. Sem cartãozinho de papel.</h2>
-  <div class="passos">
-    <div class="passo"><span><b>Você assina online</b> — leva um minuto, direto no cartão.</span></div>
-    <div class="passo"><span><b>Chega no salão e entra na fila digital</b> pelo celular, no botão "Sou do Clube". Só digitar seu WhatsApp: o sistema reconhece você.</span></div>
-    <div class="passo"><span><b>Sai pronta em cerca de 40 minutos</b> — sem passar no caixa, porque a escova já é sua.</span></div>
-  </div>
-</section>
+  <!-- 2 · a conta avulsa -->
+  <section class="sl">
+    <div class="c">
+      <span class="tag">Primeiro, a conta</span>
+      <p class="sub" style="margin:0 0 8px"><b>Escova avulsa: R$ 77.</b><br>Uma por semana, no fim do mês…</p>
+      <div class="bignum"><small>R$</small>308</div>
+      <p class="sub">Todo mês. <b>R$ 3.696 por ano</b> pra estar sempre pronta.</p>
+    </div>
+  </section>
 
-<!-- 5 · regras na mesa -->
-<section class="slide">
-  <p class="kicker">Combinado é combinado</p>
-  <h2>As regras, todas na mesa.</h2>
-  <ul class="regras">
-    <li>Sem fidelidade. Cancela quando quiser, sem multa.</li>
-    <li>As escovas valem dentro do mês (não acumulam pro seguinte).</li>
-    <li>O plano cobre a escova lisa do seu comprimento. Quer modelada? Só a diferença de R$ 10 no dia.</li>
-    <li>Pode usar duas no mesmo dia, se quiser.</li>
-    <li>Cabelo longo (passa da linha do busto) tem plano próprio, preço fechado.</li>
-    <li>Primeiro lote: 30 vagas.</li>
-  </ul>
-</section>
+  <!-- 3 · o clube -->
+  <section class="sl">
+    <div class="bgimg" style="background-image:url('ritual.jpg')"></div>
+    <div class="véu"></div>
+    <div class="c">
+      <span class="tag">O Clube da Escova</span>
+      <h2>As mesmas 4 escovas por<br><span class="gold">R$ 197</span></h2>
+      <p class="sub">Assinatura mensal. As escovas ficam <b>no seu nome, no nosso sistema</b> — e você usa quando quiser vir.</p>
+    </div>
+  </section>
 
-<!-- 6 · planos + cta -->
-<section class="slide">
-  <p class="kicker">Escolha o seu</p>
-  <h2>Assine agora e use já.</h2>
-  <div class="planos">
-    <a class="plano principal cta" href="https://www.nphairexpress.com.br/clube/?assinar=4cm">
-      <span class="p-top"><span class="p-nome">4 escovas/mês</span><span class="p-preco">R$ 197</span></span>
-      <span class="p-sub">Cabelo curto ou médio · escova sai R$ 49</span>
-    </a>
-    <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=4long">
-      <span class="p-top"><span class="p-nome">4 escovas/mês · longo</span><span class="p-preco">R$ 247</span></span>
-      <span class="p-sub">Cabelo abaixo da linha do busto · escova sai R$ 62</span>
-    </a>
-    <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=8cm">
-      <span class="p-top"><span class="p-nome">8 escovas/mês</span><span class="p-preco">R$ 347</span></span>
-      <span class="p-sub">Duas por semana · escova sai R$ 43</span>
-    </a>
-    <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=8long">
-      <span class="p-top"><span class="p-nome">8 escovas/mês · longo</span><span class="p-preco">R$ 447</span></span>
-      <span class="p-sub">Duas por semana, cabelo longo · escova sai R$ 56</span>
-    </a>
-  </div>
-  <div class="ativa">
-    <b>Pagou, ativou.</b> A assinatura entra no nosso sistema na hora — no seu próximo dia de atendimento é só chegar, entrar na fila como "Sou do Clube" e usar a primeira escova.
-  </div>
-  <div class="cta-fim">
-    <a class="btn cta" href="https://www.nphairexpress.com.br/clube/?assinar=4cm">Quero assinar o Clube</a>
-    <p class="btn-sub">Pagamento no cartão, em ambiente seguro. Dúvidas? Chama a gente neste WhatsApp mesmo.</p>
-  </div>
-</section>
+  <!-- 4 · o número -->
+  <section class="sl">
+    <div class="c">
+      <span class="tag">Fazendo a conta</span>
+      <p class="sub" style="margin:0 0 8px">Cada escova sai por <b>R$ 49</b> <span class="riscado" style="color:rgba(255,255,255,.5)">R$ 77</span></p>
+      <div class="bignum"><small>R$</small>111</div>
+      <h2 style="font-size:clamp(24px,6.6vw,40px);margin-top:6px">sobrando no seu bolso,<br><span class="gold">todo mês</span></h2>
+    </div>
+  </section>
 
-<footer>
-  <b>NP Hair Express</b> · R. Sete de Setembro, 374 — Centro, Salto/SP · Ter a Sáb, 8h às 20h · Agosto de 2026
-</footer>
+  <!-- 5 · como funciona -->
+  <section class="sl">
+    <div class="c">
+      <span class="tag">Como funciona</span>
+      <h2 style="margin-bottom:14px">Sem hora<br>marcada</h2>
+      <div class="passos">
+        <div class="passo"><span class="n">1</span><p>Assina online <span>— 1 minuto, direto no cartão.</span></p></div>
+        <div class="passo"><span class="n">2</span><p>Chega e toca em "Sou do Clube" <span>na fila digital. O sistema reconhece seu WhatsApp.</span></p></div>
+        <div class="passo"><span class="n">3</span><p>Sai pronta em ~40 min <span>— sem passar no caixa. A escova já é sua.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · regras -->
+  <section class="sl">
+    <div class="c">
+      <span class="tag">Combinado é combinado</span>
+      <h2 style="margin-bottom:14px">Regras na<br>mesa</h2>
+      <ul class="regras">
+        <li>Sem fidelidade. <span>Cancela quando quiser.</span></li>
+        <li>Valem no mês. <span>Não acumulam.</span></li>
+        <li>Escova lisa do seu comprimento. <span>Modelada? +R$ 10 no dia.</span></li>
+        <li>Pode usar 2 no mesmo dia.</li>
+        <li>1º lote: 30 vagas.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 · planos + cta -->
+  <section class="sl">
+    <div class="bgimg" style="background-image:url('final.jpg');background-position:center 30%"></div>
+    <div class="véu"></div>
+    <div class="c">
+      <span class="tag">Escolha o seu</span>
+      <h2 style="font-size:clamp(30px,8vw,52px)">Assine agora.<br><span class="gold">Use já.</span></h2>
+      <div class="planos">
+        <a class="plano top cta" href="https://www.nphairexpress.com.br/clube/?assinar=4cm">
+          <span class="nm">4 escovas/mês<small>curto ou médio · sai R$ 49 cada</small></span>
+          <span class="pr">R$ 197</span>
+        </a>
+        <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=4long">
+          <span class="nm">4 escovas · longo<small>abaixo do busto · sai R$ 62 cada</small></span>
+          <span class="pr">R$ 247</span>
+        </a>
+        <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=8cm">
+          <span class="nm">8 escovas/mês<small>2 por semana · sai R$ 43 cada</small></span>
+          <span class="pr">R$ 347</span>
+        </a>
+        <a class="plano cta" href="https://www.nphairexpress.com.br/clube/?assinar=8long">
+          <span class="nm">8 escovas · longo<small>2 por semana · sai R$ 56 cada</small></span>
+          <span class="pr">R$ 447</span>
+        </a>
+      </div>
+      <a class="btn cta" href="https://www.nphairexpress.com.br/clube/?assinar=4cm">Quero assinar</a>
+      <p class="ativa"><b>Pagou, ativou.</b> A assinatura entra no sistema na hora — já vale no seu próximo dia de atendimento.</p>
+      <p class="rodape">NP Hair Express · R. Sete de Setembro, 374 — Centro, Salto/SP · Ter a Sáb, 8h–20h</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="voltar" id="zVoltar"></div>
+<div class="avancar" id="zAvancar"></div>
+<p class="toque" id="dica">Toque pra avançar</p>
 
 <script>
-  // Propaga UTMs do e-mail pros links de checkout (rastreio ponta a ponta)
-  (function () {
-    var qs = new URLSearchParams(location.search);
-    var utms = [];
-    qs.forEach(function (v, k) { if (k.indexOf('utm_') === 0) utms.push(k + '=' + encodeURIComponent(v)); });
-    if (!utms.length) return;
-    document.querySelectorAll('a.cta').forEach(function (a) {
-      a.href += (a.href.indexOf('?') > -1 ? '&' : '?') + utms.join('&');
-    });
-  })();
-  // Clique no CTA = InitiateCheckout no pixel
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.sl'));
+  var atual = 0, total = slides.length;
+
+  // barra de progresso
+  var prog = document.getElementById('prog');
+  for (var i = 0; i < total; i++) { var s = document.createElement('span'); s.appendChild(document.createElement('i')); prog.appendChild(s); }
+  var segs = prog.children;
+
+  function mostra(n) {
+    if (n < 0 || n >= total) return;
+    slides[atual].classList.remove('on');
+    atual = n;
+    slides[atual].classList.add('on');
+    for (var i = 0; i < total; i++) segs[i].className = i < atual ? 'done' : '';
+    segs[atual].className = 'done';
+    document.getElementById('dica').style.display = (atual === total - 1) ? 'none' : '';
+    if (window.fbq && atual === total - 1) fbq('trackCustom', 'ApresentacaoFim');
+  }
+  mostra(0);
+
+  document.getElementById('zAvancar').addEventListener('click', function () { mostra(atual + 1); });
+  document.getElementById('zVoltar').addEventListener('click', function () { mostra(atual - 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') mostra(atual + 1);
+    if (e.key === 'ArrowLeft') mostra(atual - 1);
+  });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (dx < -40) mostra(atual + 1);
+    if (dx > 40) mostra(atual - 1);
+  }, { passive: true });
+
+  // links do slide final ficam ACIMA das zonas de toque
+  slides[total - 1].style.zIndex = 22;
+
+  // UTMs do e-mail seguem até o checkout
+  var qs = new URLSearchParams(location.search), utms = [];
+  qs.forEach(function (v, k) { if (k.indexOf('utm_') === 0) utms.push(k + '=' + encodeURIComponent(v)); });
   document.querySelectorAll('a.cta').forEach(function (a) {
-    a.addEventListener('click', function () {
-      if (window.fbq) fbq('track', 'InitiateCheckout', { content_name: 'Apresentação Clube — ' + (a.querySelector('.p-nome') ? a.querySelector('.p-nome').textContent : 'botão final') });
+    if (utms.length) a.href += (a.href.indexOf('?') > -1 ? '&' : '?') + utms.join('&');
+    a.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (window.fbq) fbq('track', 'InitiateCheckout', { content_name: 'Apresentação Clube' });
     });
   });
+})();
 </script>
 </body>
 </html>
