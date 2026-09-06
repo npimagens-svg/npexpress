@@ -211,6 +211,14 @@ export async function onRequestPost(context) {
         return json(422, { ok: false, erro: mensagemErroAsaas(criacao.dados) });
       }
       customerId = criacao.dados.id;
+    } else {
+      // Cliente já existia no Asaas (fila online, cobrança avulsa antiga...) e pode
+      // estar com telefone velho. O webhook copia o mobilePhone do Asaas pro
+      // clube_assinantes, e é por esse número que a fila "Sou do Clube" e o
+      // trigger da comanda reconhecem a assinante — telefone errado = assinatura
+      // que não funciona no salão (aconteceu em 05/09: veio um fixo).
+      // Atualiza com o que ela acabou de digitar. Best-effort: não bloqueia a venda.
+      await asaas(env, "POST", "/customers/" + customerId, payloads.customer);
     }
 
     // (c) cria a assinatura com cartão

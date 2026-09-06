@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5X3662FF');</script>
+<!-- End Google Tag Manager -->
+
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clube da Escova — Assinatura de Escova em Salto/SP | NP Hair Express</title>
@@ -93,6 +101,9 @@
     if (typeof window.fbq === "function") {
       window.fbq("track", evento, params || {});
     }
+    // Mesmo funil no GA4, via GTM
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: "clube_" + evento.toLowerCase() }, params || {}));
   };
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -632,10 +643,19 @@
   .co-sucesso h3 { margin-top: 16px; font-family: var(--serif); font-size: 26px; color: var(--text); }
   .co-sucesso p { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--body); }
   .co-sucesso .co-submit { margin-top: 24px; }
+  .co-pesq-titulo { margin-top: 22px; font-size: 14px; line-height: 1.5; color: var(--body); }
+  .co-pesq-ops { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+  .co-pesq-op { border: 1px solid rgba(0,0,0,.18); background: #fff; border-radius: 999px;
+    padding: 9px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+  .co-pesq-op:hover { border-color: #F7A100; color: #b06f00; }
+  .co-pesq-obrigado { margin-top: 18px; font-size: 14px; color: #b06f00; }
   body.co-lock { overflow: hidden; }
 </style>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5X3662FF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
 
   <!-- Header -->
   <header class="site-header">
@@ -1119,6 +1139,15 @@
         </span>
         <h3>Assinatura ativa!</h3>
         <p>Você já pode vir toda semana. Nos vemos no salão.</p>
+        <div id="co-pesquisa">
+          <p class="co-pesq-titulo">Só uma coisa, pra gente te atender melhor: quantas escovas você fazia por mês antes do Clube?</p>
+          <div class="co-pesq-ops">
+            <button type="button" class="co-pesq-op" data-freq="1-2">1 ou 2</button>
+            <button type="button" class="co-pesq-op" data-freq="3-4">3 ou 4</button>
+            <button type="button" class="co-pesq-op" data-freq="5+">Toda semana ou mais</button>
+          </div>
+        </div>
+        <p class="co-pesq-obrigado" id="co-pesq-obrigado" hidden>Obrigada! Anotado.</p>
         <button type="button" class="co-submit" id="co-sucesso-fechar">Fechar</button>
       </div>
     </div>
@@ -1258,8 +1287,21 @@
     coErro.hidden = true;
   }
 
+  // Qualificacao vai junto de todo evento: o plano ja carrega comprimento e
+  // frequencia contratada, entao o Meta e o GA4 aprendem QUEM converte.
+  function qualificacao(planoKey) {
+    var k = planoKey || planoAtivo;
+    return {
+      plano: k,
+      comprimento: k.indexOf("long") > -1 ? "longo" : "curto_medio",
+      escovas_mes: k.indexOf("8") === 0 ? 8 : 4
+    };
+  }
+
   function track(evento, params) {
-    if (typeof window.npTrack === "function") window.npTrack(evento, params);
+    if (typeof window.npTrack === "function") {
+      window.npTrack(evento, Object.assign(qualificacao(), params || {}));
+    }
   }
 
   // Deep-link: /clube/?assinar=4cm|4long|8cm|8long abre o checkout direto no plano
@@ -1298,6 +1340,23 @@
   });
   document.getElementById("co-close").addEventListener("click", fecharCheckout);
   document.getElementById("co-sucesso-fechar").addEventListener("click", fecharCheckout);
+
+  // Pesquisa da tela de obrigado: a resposta vira evento (Pixel + GA4) com a
+  // frequencia REAL de quem comprou — e o que ensina o algoritmo a achar iguais.
+  Array.prototype.forEach.call(document.querySelectorAll(".co-pesq-op"), function (b) {
+    b.addEventListener("click", function () {
+      var freq = b.getAttribute("data-freq");
+      if (typeof window.fbq === "function") {
+        window.fbq("trackCustom", "QualificacaoPosCompra",
+          Object.assign(qualificacao(), { escovas_mes_antes: freq }));
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: "clube_qualificacao_pos_compra" },
+        qualificacao(), { escovas_mes_antes: freq }));
+      document.getElementById("co-pesquisa").hidden = true;
+      document.getElementById("co-pesq-obrigado").hidden = false;
+    });
+  });
   coOverlay.addEventListener("click", function (e) {
     if (e.target === coOverlay) fecharCheckout();
   });
@@ -1420,8 +1479,11 @@
             currency: "BRL",
             predicted_ltv: p.valor * 3
           };
+          // Purchase NAO sai daqui: quem manda e o CAPI (asaas-webhook), com
+          // event_id = payment.id, quando o pagamento CONFIRMA de verdade. O
+          // browser nao conhece esse id, entao os dois nunca deduplicariam e o
+          // Meta contava a mesma venda duas vezes.
           track("Subscribe", evParams);
-          track("Purchase", evParams);
           coFormView.hidden = true;
           coSucesso.hidden = false;
           coSucesso.scrollIntoView({ block: "nearest" });
