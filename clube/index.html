@@ -650,6 +650,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .co-pesq-op:hover { border-color: #F7A100; color: #b06f00; }
   .co-pesq-obrigado { margin-top: 18px; font-size: 14px; color: #b06f00; }
   body.co-lock { overflow: hidden; }
+  /* aviso de assinatura que já existe (evita pacote duplicado sem querer) */
+  .co-aviso { margin-top: 20px; text-align: center; }
+  .co-aviso[hidden] { display: none; }
+  .co-aviso h4 { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--text); }
+  .co-aviso p { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--body); }
+  .co-aviso .co-aviso-nota { font-size: 13px; color: var(--muted); }
+  .co-aviso .co-submit { margin-top: 20px; }
+  .co-aviso-sim {
+    display: block; width: 100%; margin-top: 12px; padding: 14px; border-radius: 12px;
+    border: 1px solid rgba(247,161,0,0.6); background: transparent; color: var(--brand);
+    font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+  .co-aviso-sim:hover { background: rgba(247,161,0,0.08); }
+  .co-aviso-sim[disabled] { opacity: 0.6; cursor: wait; }
 </style>
 </head>
 <body>
@@ -1131,6 +1145,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <button type="button" class="co-back" id="co-voltar" hidden>&larr; Voltar aos meus dados</button>
           <p class="co-safe">Pagamento seguro processado pelo Asaas · só cartão de crédito</p>
         </form>
+
+        <div class="co-aviso" id="co-aviso" role="alertdialog" aria-labelledby="co-aviso-titulo" hidden>
+          <div id="co-aviso-pergunta">
+            <h4 id="co-aviso-titulo">Você já é do Clube</h4>
+            <p>Já existe uma assinatura ativa do Clube da Escova com estes dados. Quer assinar mais um pacote?</p>
+            <p class="co-aviso-nota">Se sim, o novo pacote é uma assinatura separada, cobrada todo mês no cartão que você informou.</p>
+            <div class="co-erro" id="co-aviso-erro" hidden></div>
+            <button type="button" class="co-submit" id="co-aviso-nao">Não, já sou assinante</button>
+            <button type="button" class="co-aviso-sim" id="co-aviso-sim">Sim, quero mais um pacote</button>
+          </div>
+          <div id="co-aviso-ok" hidden>
+            <h4>Combinado!</h4>
+            <p>Sua assinatura continua valendo e nada foi cobrado agora. Se tiver qualquer dúvida, é só chamar a gente no WhatsApp.</p>
+            <button type="button" class="co-submit" id="co-aviso-fechar">Fechar</button>
+          </div>
+        </div>
       </div>
 
       <div class="co-sucesso" id="co-sucesso" hidden>
@@ -1319,6 +1349,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     coSubmit.textContent = "Confirmar assinatura de R$" + p.valor + "/mês";
     coSubmit.disabled = false;
     coErro.hidden = true;
+    esconderAviso();
     irPasso(1);
     coFormView.hidden = false;
     coSucesso.hidden = true;
@@ -1461,18 +1492,95 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     track("AddPaymentInfo", { content_name: "Clube da Escova", value: p.valor, currency: "BRL" });
 
+    enviarAssinatura(dados, null);
+  });
+
+  /* ---------- Aviso de assinatura que já existe ---------- */
+  var coAviso = document.getElementById("co-aviso");
+  var coAvisoPergunta = document.getElementById("co-aviso-pergunta");
+  var coAvisoOk = document.getElementById("co-aviso-ok");
+  var coAvisoErro = document.getElementById("co-aviso-erro");
+  var coAvisoSim = document.getElementById("co-aviso-sim");
+  var coAvisoNao = document.getElementById("co-aviso-nao");
+  var enviando = false;
+  var pendente = null; // { dados, confirmacao } enquanto o aviso está na tela
+
+  function mostrarAviso(dados, confirmacao) {
+    pendente = { dados: dados, confirmacao: confirmacao };
+    coForm.hidden = true;
+    coAviso.hidden = false;
+    coAvisoPergunta.hidden = false;
+    coAvisoOk.hidden = true;
+    coAvisoErro.hidden = true;
+    coAvisoSim.disabled = false;
+    coAvisoSim.textContent = "Sim, quero mais um pacote";
+    coAviso.scrollIntoView({ block: "nearest" });
+  }
+
+  function esconderAviso() {
+    pendente = null;
+    coAviso.hidden = true;
+    coForm.hidden = false;
+  }
+
+  coAvisoNao.addEventListener("click", function () {
+    pendente = null;
+    coAvisoPergunta.hidden = true;
+    coAvisoOk.hidden = false;
+  });
+  document.getElementById("co-aviso-fechar").addEventListener("click", fecharCheckout);
+  coAvisoSim.addEventListener("click", function () {
+    if (!pendente || enviando) return;
+    coAvisoErro.hidden = true;
+    coAvisoSim.disabled = true;
+    coAvisoSim.textContent = "Processando…";
+    enviarAssinatura(pendente.dados, pendente.confirmacao);
+  });
+
+  function enviarAssinatura(dados, confirmacao) {
+    if (enviando) return; // duplo clique / Enter repetido
+    enviando = true;
+    var p = CHECKOUT_PLANOS[planoAtivo];
+    var corpo = Object.assign({}, dados);
+    if (confirmacao) corpo.confirmar_segundo_pacote = confirmacao;
+
     coSubmit.disabled = true;
-    var textoOriginal = coSubmit.textContent;
+    var textoOriginal = "Confirmar assinatura de R$" + p.valor + "/mês";
     coSubmit.textContent = "Processando…";
+
+    function falhou(msg) {
+      enviando = false;
+      if (pendente) {
+        coAvisoErro.textContent = msg;
+        coAvisoErro.hidden = false;
+        coAvisoSim.disabled = false;
+        coAvisoSim.textContent = "Sim, quero mais um pacote";
+      } else {
+        mostrarErro(msg);
+      }
+      coSubmit.disabled = false;
+      coSubmit.textContent = textoOriginal;
+    }
 
     fetch("/api/assinar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados)
+      body: JSON.stringify(corpo)
     })
       .then(function (res) { return res.json().catch(function () { return {}; }); })
       .then(function (resp) {
+        if (resp && resp.ja_tem_assinatura && resp.confirmacao) {
+          enviando = false;
+          coSubmit.disabled = false;
+          coSubmit.textContent = textoOriginal;
+          mostrarAviso(dados, resp.confirmacao);
+          return;
+        }
         if (resp && resp.ok) {
+          enviando = false;
+          pendente = null;
+          coAviso.hidden = true;
+          coForm.hidden = false;
           var evParams = {
             content_name: "Clube da Escova",
             value: p.valor,
@@ -1488,17 +1596,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           coSucesso.hidden = false;
           coSucesso.scrollIntoView({ block: "nearest" });
         } else {
-          mostrarErro((resp && resp.erro) || "Não conseguimos concluir sua assinatura agora. Tente de novo ou chame a gente no WhatsApp.");
-          coSubmit.disabled = false;
-          coSubmit.textContent = textoOriginal;
+          falhou((resp && resp.erro) || "Não conseguimos concluir sua assinatura agora. Tente de novo ou chame a gente no WhatsApp.");
         }
       })
       .catch(function () {
-        mostrarErro("Falha de conexão. Confira sua internet e tente de novo.");
-        coSubmit.disabled = false;
-        coSubmit.textContent = textoOriginal;
+        falhou("Falha de conexão. Confira sua internet e tente de novo.");
       });
-  });
+  }
 
   /* ---------- Acordeão FAQ ---------- */
   var faqItems = document.querySelectorAll(".faq-item");
